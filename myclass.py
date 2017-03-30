@@ -11,12 +11,18 @@ class myclass:
         self.ref=self.read_tsv('reference')
         self.detail=self.get_detail_acc()
     #csvデータを読み込み，DF型で返す関数
-    def read_csv(self,name):
-        df = pd.read_csv("data/"+name+".csv")
+    def read_csv(self,name,header=None):
+        if header is None:
+            df = pd.read_csv("data/"+name+".csv")
+        else:
+            df = pd.read_csv("data/"+name+".csv",header=header)
         return df
     #tsvデータを読み込み，DF型で返す関数
-    def read_tsv(self, name):
-        df = pd.read_csv("data/" + name + ".tsv", delimiter='\t',dtype={'detail_name':str,'target_name':str})
+    def read_tsv(self, name,header=None):
+        if header is None:
+            df = pd.read_csv("data/" + name + ".tsv", delimiter='\t',dtype={'detail_name':str,'target_name':str})
+        else:
+            df = pd.read_csv("data/" + name + ".tsv", delimiter='\t', dtype={'detail_name': str, 'target_name': str},header=header)
         return df
     #詳細データから個数の配列を返す関数
     def get_detail_acc(self):
