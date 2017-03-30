@@ -41,7 +41,7 @@ class deta_analysis:
             return self.ref[self.ref['detail_id'].isin([id])]['detail_name'].get(int(id))
         else:
             return self.ref[self.ref['detail_id'].isin([id])]['target_name'].get(int(id))
-    #詳細円グラフを表示する関数(acc:Trueで障害なし表示)
+    #詳細棒グラフを表示する関数(acc:Trueで障害なし表示)
     def show_circle_dt(self,acc):
         labels=[]
         nums=[]
@@ -67,7 +67,7 @@ class deta_analysis:
                     '{:1.2f}%'.format(width / total * 100),
                     ha="center")
         plt.show()
-    #カテゴリ円グラフを表示する関数(acc:Trueで障害なし表示)
+    #カテゴリ棒グラフを表示する関数(acc:Trueで障害なし表示)
     def show_circle_ct(self, acc):
         dic={'異常なし':0,'人身支障':0,'機械支障':0,'気象支障':0}
         for i in self.detail.columns:
@@ -94,4 +94,5 @@ class deta_analysis:
 
 if __name__=='__main__':
     my=deta_analysis()
+    my.show_circle_dt(acc=False)
     my.show_circle_ct(acc=False)
