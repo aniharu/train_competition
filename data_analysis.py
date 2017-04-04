@@ -6,42 +6,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from operator import itemgetter
+from myclass import myclass
 
 
-class deta_analysis:
+class deta_analysis(myclass):
     def __init__(self):
-        self.dt=self.read_csv('detail')
-        self.ct=self.read_csv('train')
-        self.ref=self.read_tsv('reference')
-        self.detail=self.get_detail_acc()
-    #csvデータを読み込み，DF型で返す関数
-    def read_csv(self,name):
-        df = pd.read_csv("data/"+name+".csv")
-        return df
-    #tsvデータを読み込み，DF型で返す関数
-    def read_tsv(self, name):
-        df = pd.read_csv("data/" + name + ".tsv", delimiter='\t',dtype={'detail_name':str,'target_name':str})
-        return df
-    #詳細データから個数の配列を返す関数
-    def get_detail_acc(self):
-        col=self.dt.columns[1:]
-        dic={}
-        for i in col:
-            tmp=self.dt[i].value_counts().to_dict()
-            for j in tmp.keys():
-                if str(j) in dic:
-                    dic[str(j)] =dic[str(j)] + tmp[j]
-                else:
-                    dic[str(j)] = tmp[j]
-        for j in dic.keys():
-            dic[j]=[dic[j]]
-        return pd.DataFrame.from_dict(dic)
-    #id検索をしてリファレンスから返す関数
-    def get_ref(self,id,detail):
-        if detail:
-            return self.ref[self.ref['detail_id'].isin([id])]['detail_name'].get(int(id))
-        else:
-            return self.ref[self.ref['detail_id'].isin([id])]['target_name'].get(int(id))
+        super().__init__()
     #詳細障害の棒グラフを表示する関数(acc:Trueで障害なし表示)
     def show_circle_dt(self,acc):
         labels=[]

@@ -15,14 +15,14 @@ class myclass:
         if header is None:
             df = pd.read_csv("data/"+name+".csv")
         else:
-            df = pd.read_csv("data/"+name+".csv",header=header)
+            df = pd.read_csv("data/"+name+".csv",names=header)
         return df
     #tsvデータを読み込み，DF型で返す関数
     def read_tsv(self, name,header=None):
         if header is None:
             df = pd.read_csv("data/" + name + ".tsv", delimiter='\t',dtype={'detail_name':str,'target_name':str})
         else:
-            df = pd.read_csv("data/" + name + ".tsv", delimiter='\t', dtype={'detail_name': str, 'target_name': str},header=header)
+            df = pd.read_csv("data/" + name + ".tsv", delimiter='\t', dtype={'detail_name': str, 'target_name': str},names=header)
         return df
     #詳細データから個数の配列を返す関数
     def get_detail_acc(self):
