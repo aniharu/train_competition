@@ -11,8 +11,9 @@ class RandomForestC():
         self.data=pd.read_csv('data/connected_train.csv')
         self.min = 1e-15
         self.trees=10
+        self.features='auto'
     def model_create(self):
-        self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=self.trees)
+        self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=self.trees,max_features=self.features)
     def cross_validation(self,K=10):
         print('全体の長さ：'+str(len(self.data)))
         print('分割長：'+str(1.0*len(self.data)/K))
@@ -70,9 +71,12 @@ class RandomForestC():
         return logloss
     def set_trees(self,num):
         self.trees=num
+    def set_features(self,method):
+        self.features=method
 
 
 if __name__=='__main__':
     myclass=RandomForestC()
     myclass.set_trees(50)
+    myclass.set_features('log2')
     myclass.cross_validation(K=10)
