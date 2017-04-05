@@ -10,8 +10,9 @@ class RandomForestC():
     def __init__(self):
         self.data=pd.read_csv('data/connected_train.csv')
         self.min = 1e-15
+        self.trees=10
     def model_create(self):
-        self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=200)
+        self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=self.trees)
     def cross_validation(self,K=10):
         print('全体の長さ：'+str(len(self.data)))
         print('分割長：'+str(1.0*len(self.data)/K))
@@ -45,8 +46,6 @@ class RandomForestC():
             score+=logloss
         score/=K
         print('最終スコア：'+str(score))
-
-
     def df_merge(self,data):
         tmp=pd.DataFrame()
         for i in data:
@@ -69,8 +68,11 @@ class RandomForestC():
         logloss/=len(act)
         logloss*=-1
         return logloss
+    def set_trees(self,num):
+        self.trees=num
 
 
 if __name__=='__main__':
     myclass=RandomForestC()
+    myclass.set_trees(50)
     myclass.cross_validation(K=10)
