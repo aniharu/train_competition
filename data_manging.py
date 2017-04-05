@@ -9,7 +9,7 @@ class data_manging(myclass):
     def __init__(self):
         #各データを読み込む
         self.raw_train=self.read_csv('train')
-        self.temperature=pd.read_csv('data/temperature.csv',names=['観測日時','局ID','市町村区コード','データ種別コード','品質コード','測定値'],na_values='-')
+        self.temperature=pd.read_csv('data/fixed_temperature.csv',names=['観測日時','局ID','市町村区コード','データ種別コード','品質コード','測定値','fixed'],na_values='-')
         #欠損値を前方穴埋めで置換
         self.temperature=self.temperature.fillna(method='ffill')
         self.point=self.read_tsv('observation_point')

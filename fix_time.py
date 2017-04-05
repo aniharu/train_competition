@@ -27,32 +27,33 @@ def fixtime(df):
             df=df.sort_index()
             fixed.append(True)
         ntime=df.index[i]
+    df=df[['局ID', '市町村区コード', 'データ種別コード', '品質コード', '測定値']]
     df['fixed']=fixed
 
     return df,sum(fixed)
-
 #地点idによってデータを分割
 def split_by_id(name):
     point = pd.read_csv("data/observation_point.tsv", delimiter='\t', dtype={'detail_name': str, 'target_name': str})
-    df = pd.read_csv('data/' + name + '.csv', names=['観測日時', '局ID', '市町村区コード', 'データ種別コード', '品質コード', '測定値'],parse_dates=True, index_col=0)
+    df = pd.read_csv('data/' + name + '.csv', names=['観測日時', '局ID', '市町村区コード', 'データ種別コード', '品質コード', '測定値','1','2','3','4'],parse_dates=True, index_col=0)
     fixed=pd.DataFrame()
     dic={}
     for i in point['局ID']:
         print(str(i)+'\tの処理を実行中')
         mydf=df[df['局ID'].isin([i])]
         if len(mydf)==0:
+            print('観測してない地点')
             dic[str(i)] = -1
             continue
-        tmp,errnum=fixtime()
+        tmp,errnum=fixtime(mydf)
         if errnum != -9999999999:
             fixed=fixed.append(tmp)
         dic[str(i)]=errnum
 
     fixed.to_csv('data/fixed_'+name+'.csv',index_label=['観測日時'])
     jstring=json.dumps(dic)
-    with open('output.txt',mode='w') as f:
+    with open(name+'_output.txt',mode='w') as f:
         f.write(jstring)
 
 
 if __name__=='__main__':
-    split_by_id('precipitation')
+    split_by_id('wind_max')
