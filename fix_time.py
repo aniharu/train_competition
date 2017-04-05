@@ -12,6 +12,9 @@ def fixtime(df):
     if ntime != datetime.datetime(year=2012,month=1,day=1,hour=0,minute=0):
         print('最初の日付が違います')
         return None,-9999999999
+    elif df.index[-1] != datetime.datetime(year=2013,month=6,day=30,hour=23,minute=50):
+        print('最後の日付が違います')
+        return None,-9999999999
     fixed=[False]
     for i in range(1,78768):
         if df.index[i] == ntime+datetime.timedelta(minutes=10):
@@ -36,16 +39,20 @@ def split_by_id(name):
     dic={}
     for i in point['局ID']:
         print(str(i)+'\tの処理を実行中')
-        tmp,errnum=fixtime(df[df['局ID'].isin([i])])
+        mydf=df[df['局ID'].isin([i])]
+        if len(mydf)==0:
+            dic[str(i)] = -1
+            continue
+        tmp,errnum=fixtime()
         if errnum != -9999999999:
             fixed=fixed.append(tmp)
         dic[str(i)]=errnum
 
-    fixed.to_csv('fixed_'+name+'.csv',index=False)
+    fixed.to_csv('data/fixed_'+name+'.csv',index_label=['観測日時'])
     jstring=json.dumps(dic)
     with open('output.txt',mode='w') as f:
         f.write(jstring)
 
 
 if __name__=='__main__':
-    split_by_id('temperature')
+    split_by_id('precipitation')
