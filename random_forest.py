@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from itertools import compress
 import numpy as np
+from operator import itemgetter
 
 class RandomForestC():
     def __init__(self):
@@ -73,6 +74,15 @@ class RandomForestC():
         self.trees=num
     def set_features(self,method):
         self.features=method
+    #特徴の重要度算出
+    def get_feature_importance(self,limit=10):
+        imp=self.model.feature_importances_
+        names=self.train.ix[:,6:]
+        names=names.columns
+        tmp = list(zip(names, imp))
+        tmp.sort(key=itemgetter(1), reverse=True)
+        labels, nums = zip(*tmp)
+        return labels[:10],nums[:10]
 
 
 if __name__=='__main__':
@@ -80,3 +90,6 @@ if __name__=='__main__':
     myclass.set_trees(50)
     myclass.set_features('log2')
     myclass.cross_validation(K=10)
+    label,num=myclass.get_feature_importance()
+    print(label)
+    print(num)
