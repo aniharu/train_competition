@@ -6,6 +6,7 @@ import pandas as pd
 from itertools import compress
 import numpy as np
 from operator import itemgetter
+import pprint
 
 class RandomForestC():
     def __init__(self):
@@ -14,10 +15,8 @@ class RandomForestC():
         self.trees=10
         self.features='auto'
     def model_create(self):
-        self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=self.trees,max_features=self.features)
+        self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=self.trees,max_features=self.features,random_state=0)
     def cross_validation(self,K=10):
-        print('全体の長さ：'+str(len(self.data)))
-        print('分割長：'+str(1.0*len(self.data)/K))
         split_length=int(1.0*len(self.data)/K)
         splited_data=[]
         for i in range(K):
@@ -82,14 +81,17 @@ class RandomForestC():
         tmp = list(zip(names, imp))
         tmp.sort(key=itemgetter(1), reverse=True)
         labels, nums = zip(*tmp)
-        return labels[:10],nums[:10]
+        return labels,nums
 
 
 if __name__=='__main__':
     myclass=RandomForestC()
-    myclass.set_trees(50)
+    myclass.set_trees(1000)
     myclass.set_features('log2')
     myclass.cross_validation(K=10)
     label,num=myclass.get_feature_importance()
-    print(label)
-    print(num)
+    out=dict(zip(label,num))
+    with open('result.txt','w') as fout:
+        fout.write(pprint.pformat(out))
+
+
