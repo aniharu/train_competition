@@ -10,7 +10,7 @@ import pprint
 
 class RandomForestC():
     def __init__(self):
-        self.data=pd.read_csv('data/connected_train.csv')
+        self.data=pd.read_csv('data/noprec_connected_train.csv')
         self.min = 1e-15
         self.trees=10
         self.features='auto'
@@ -86,7 +86,7 @@ class RandomForestC():
 
 if __name__=='__main__':
     myclass=RandomForestC()
-    myclass.set_trees(1000)
+    myclass.set_trees(300)
     myclass.set_features('log2')
     myclass.cross_validation(K=10)
     label,num=myclass.get_feature_importance()

@@ -23,9 +23,9 @@ def data_connect():
         tmp=temp[temp['局ID'].isin([i])]['測定値'].as_matrix()
         if len(tmp) == 78768:
             train[str(i)+'_temp']=tmp
-        tmp=prec[prec['局ID'].isin([i])]['測定値'].as_matrix()
-        if len(tmp) == 78768:
-            train[str(i) + '_prec']=tmp
+        # tmp=prec[prec['局ID'].isin([i])]['測定値'].as_matrix()
+        # if len(tmp) == 78768:
+        #     train[str(i) + '_prec']=tmp
         tmp=wind[wind['局ID'].isin([i])]['測定値'].as_matrix()
         if len(tmp) == 78768:
             train[str(i) + '_wind'] =tmp
@@ -33,7 +33,7 @@ def data_connect():
         if len(tmp) == 78768:
             train[str(i) + '_mwind'] = tmp
 
-    train.to_csv('data/connected_train.csv',index=False)
+    train.to_csv('data/noprec_connected_train.csv',index=False)
 
 
 if __name__=='__main__':
