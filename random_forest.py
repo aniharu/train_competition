@@ -77,7 +77,7 @@ class RandomForestC():
     #特徴の重要度算出
     def get_feature_importance(self,limit=10):
         imp=self.model.feature_importances_
-        names=self.train.ix[:,6:]
+        names=self.data.ix[:,6:]
         names=names.columns
         tmp = list(zip(names, imp))
         tmp.sort(key=itemgetter(1), reverse=True)
