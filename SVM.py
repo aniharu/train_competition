@@ -8,7 +8,7 @@ class SVM(RandomForestC):
     def __init__(self):
         super().__init__()
     def model_create(self):
-        self.model=SVC(verbose=1,random_state=0)
+        self.model=SVC(verbose=1,random_state=0,probability=True)
 
 if __name__=='__main__':
     my=SVM()

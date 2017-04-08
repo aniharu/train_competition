@@ -80,8 +80,11 @@ class RandomForestC():
         names=names.columns
         tmp = list(zip(names, imp))
         tmp.sort(key=itemgetter(1), reverse=True)
-        labels, nums = zip(*tmp)
-        return labels,nums
+        one=dict(tmp)
+        one=sorted(one.items(), key=lambda x: x[1])
+        with open('result.txt', 'w') as fout:
+            fout.write(pprint.pformat(one))
+
 
 
 if __name__=='__main__':
@@ -89,9 +92,7 @@ if __name__=='__main__':
     myclass.set_trees(300)
     myclass.set_features('log2')
     myclass.cross_validation(K=10)
-    label,num=myclass.get_feature_importance()
-    out=dict(zip(label,num))
-    with open('result.txt','w') as fout:
-        fout.write(pprint.pformat(out))
+    myclass.get_feature_importance()
+
 
 

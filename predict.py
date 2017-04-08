@@ -2,13 +2,15 @@
 #よそくするお
 
 from random_forest import RandomForestC
+from SVM import SVM
 import pandas as pd
 import numpy as np
 
 if __name__=='__main__':
-    my=RandomForestC()
-    my.set_trees(200)
-    my.set_features('log2')
+    #my=RandomForestC()
+    my=SVM()
+    #my.set_trees(200)
+    #my.set_features('log2')
     my.model_create()
     my.fit(my.data.ix[:,6:],my.data[['tyuou','keihintohoku','keiyou','uchibou','saikyoukawagoe']])
     result=my.predict(my.data.ix[:,6:])
