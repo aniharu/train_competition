@@ -112,27 +112,31 @@ class RandomForestC():
         sns.set(font='TakaoExMincho')
         sns.jointplot(temp[1],temp[0],kind='reg')
         plt.title(self.trainname+'の温度と地点距離の関係')
-        plt.show()
+        plt.savefig(i+'temp.png')
         sns.jointplot(prec[1], prec[0],kind='reg')
         plt.title(self.trainname + 'の降水量と地点距離の関係')
-        plt.show()
+        plt.savefig(i+'prec.png')
         sns.jointplot(wind[1], wind[0],kind='reg')
         plt.title(self.trainname + 'の風速と地点距離の関係')
-        plt.show()
+        plt.savefig(i+'wind.png')
         sns.jointplot(mwind[1], mwind[0],kind='reg')
         plt.title(self.trainname + 'の最大瞬間風速と地点距離の関係')
-        plt.show()
+        plt.savefig(i+'mwind.png')
 
         with open('result.txt', 'w') as fout:
             fout.write(pprint.pformat(final))
+    def one_spot(self):
+        spots=['tyuou','keihintohoku','keiyou','uchibou','saikyoukawagoe']
+        for i in spots:
+            self.set_trainname(i)
+            self.model_create(self.data.ix[:,6:],self.data[self.trainname])
 
 
 
 if __name__=='__main__':
     myclass=RandomForestC()
-    myclass.set_trainname('saikyoukawagoe')
-    myclass.set_trees(600)
-    myclass.set_features('auto')
+    myclass.set_trees(1000)
+    myclass.set_features(50)
     myclass.cross_validation(K=10)
     myclass.get_feature_importance()
 
