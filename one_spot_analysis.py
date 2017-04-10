@@ -76,7 +76,7 @@ class RandomForestC():
     def set_trainname(self,name):
         self.trainname=name
     #特徴の重要度算出
-    def get_feature_importance(self,limit=10):
+    def get_feature_importance(self):
         imp=self.model.feature_importances_
         names=self.data.ix[:,6:]
         names=names.columns
@@ -112,24 +112,26 @@ class RandomForestC():
         sns.set(font='TakaoExMincho')
         sns.jointplot(temp[1],temp[0],kind='reg')
         plt.title(self.trainname+'の温度と地点距離の関係')
-        plt.savefig(i+'temp.png')
+        plt.savefig(self.trainname+'temp.png')
         sns.jointplot(prec[1], prec[0],kind='reg')
         plt.title(self.trainname + 'の降水量と地点距離の関係')
-        plt.savefig(i+'prec.png')
+        plt.savefig(self.trainname+'prec.png')
         sns.jointplot(wind[1], wind[0],kind='reg')
         plt.title(self.trainname + 'の風速と地点距離の関係')
-        plt.savefig(i+'wind.png')
+        plt.savefig(self.trainname+'wind.png')
         sns.jointplot(mwind[1], mwind[0],kind='reg')
         plt.title(self.trainname + 'の最大瞬間風速と地点距離の関係')
-        plt.savefig(i+'mwind.png')
+        plt.savefig(self.trainname+'mwind.png')
 
-        with open('result.txt', 'w') as fout:
+        with open(self.trainname+'result.txt', 'w') as fout:
             fout.write(pprint.pformat(final))
     def one_spot(self):
         spots=['tyuou','keihintohoku','keiyou','uchibou','saikyoukawagoe']
         for i in spots:
             self.set_trainname(i)
-            self.model_create(self.data.ix[:,6:],self.data[self.trainname])
+            self.model_create()
+            self.fit(self.data.ix[:,6:],self.data[self.trainname])
+            self.get_feature_importance()
 
 
 
@@ -137,8 +139,7 @@ if __name__=='__main__':
     myclass=RandomForestC()
     myclass.set_trees(1000)
     myclass.set_features(50)
-    myclass.cross_validation(K=10)
-    myclass.get_feature_importance()
+    myclass.one_spot()
 
 
 
