@@ -14,6 +14,7 @@ class RandomForestC():
         self.min = 1e-15
         self.trees=10
         self.features='auto'
+        self.minimum=0
     def model_create(self):
         self.model=RandomForestClassifier(n_jobs=-1,verbose=1,n_estimators=self.trees,max_features=self.features,random_state=0)
     def cross_validation(self,K=10):
@@ -47,6 +48,7 @@ class RandomForestC():
             score+=logloss
         score/=K
         print('最終スコア：'+str(score))
+        return score
     def df_merge(self,data):
         tmp=pd.DataFrame()
         for i in data:
@@ -58,7 +60,7 @@ class RandomForestC():
             self.model.fit(x_train,y_train[tname[i]])
     def predict(self,x_test):
         pred=self.model.predict_proba(x_test)
-        return pred
+        return self.predict_modify(pred)
     def logloss(self,pred,act):
         logloss=0
         for i in range(len(act)):
@@ -73,6 +75,8 @@ class RandomForestC():
         self.trees=num
     def set_features(self,method):
         self.features=method
+    def set_minimum(self,minimum):
+        self.minimum=minimum
     #特徴の重要度算出
     def get_feature_importance(self,limit=10):
         imp=self.model.feature_importances_
@@ -84,15 +88,29 @@ class RandomForestC():
         one=sorted(one.items(), key=lambda x: x[1])
         with open('result.txt', 'w') as fout:
             fout.write(pprint.pformat(one))
+    #予測値の修正
+    def predict_modify(self,data):
+        for i in range(len(data)):
+            for j in range(4):
+                if data[i,j]==0:
+                    data[i,j]+=self.minimum
+                    data[i,np.argmax(data[i])]-=self.minimum
+
+        print(np.min(data))
+
+        return data
 
 
 
 if __name__=='__main__':
-    myclass=RandomForestC()
-    myclass.set_trees(300)
-    myclass.set_features('log2')
-    myclass.cross_validation(K=10)
-    myclass.get_feature_importance()
+    result=[]
+    for i in [0.1,0.01,0.001,0.0001,0.00001,0.000001,0.0000001,0.00000001]:
+        myclass=RandomForestC()
+        myclass.set_minimum(i)
+        myclass.set_trees(600)
+        myclass.set_features('log2')
+        result.append(myclass.cross_validation(K=10))
+    print(result)
 
 
 
