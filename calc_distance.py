@@ -44,7 +44,6 @@ def getLL(id):
 
 if __name__=='__main__':
     df=pd.read_csv('data/points/tyuou.csv')
-    stpoint=get_listpoint(df)
-    print(pt_distance(stpoint,33140514))
+    print(pt_distance('tyuou',33140514))
 
 
