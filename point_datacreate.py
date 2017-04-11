@@ -50,21 +50,44 @@ class point_datacreate():
         return meandata
     #各ファイルから局IDを取得
     def get_distance(self):
-        name=['tyuou','keihintohoku','keiyou','saikyoukawagoe','sotobou','syonan','takasaki','uchibou','utsunomiya','yamanote']
+        name=['tyuou','keihintohoku','keiyou','saikyoukawagoe','uchibou']
         for n in name:
+            print(n+'を実行中です')
             df=pd.DataFrame()
             df['state']=self.train[n].tolist()
             ids=self.get_point_id(n,self.temp)
+            print('温度の数'+str(len(ids)))
             df['temp']=self.get_near_data_mean(self.temp,ids)
             ids = self.get_point_id(n, self.prec)
+            print('降水量の数' + str(len(ids)))
             df['prec'] = self.get_near_data_mean(self.prec, ids)
             ids = self.get_point_id(n, self.wind)
+            print('風速の数' + str(len(ids)))
             df['wind'] = self.get_near_data_mean(self.wind, ids)
             ids = self.get_point_id(n, self.mwind)
+            print('最大風速の数' + str(len(ids)))
             df['mwind'] = self.get_near_data_mean(self.mwind, ids)
-            df.to_csv('data/point_train/'+n+'_train.csv',index=None)
+            df.to_csv('data/point_train/' + n+'_'+str(self.max_distance) + '_train.csv', index=None)
+        name = ['sotobou','syonan','takasaki','utsunomiya','yamanote']
+        for n in name:
+            print(n + 'を実行中です')
+            df = pd.DataFrame()
+            ids = self.get_point_id(n, self.temp)
+            print('温度の数' + str(len(ids)))
+            df['temp'] = self.get_near_data_mean(self.temp, ids)
+            ids = self.get_point_id(n, self.prec)
+            print('降水量の数' + str(len(ids)))
+            df['prec'] = self.get_near_data_mean(self.prec, ids)
+            ids = self.get_point_id(n, self.wind)
+            print('風速の数' + str(len(ids)))
+            df['wind'] = self.get_near_data_mean(self.wind, ids)
+            ids = self.get_point_id(n, self.mwind)
+            print('最大風速の数' + str(len(ids)))
+            df['mwind'] = self.get_near_data_mean(self.mwind, ids)
+            df.to_csv('data/point_train/' + n+'_'+str(self.max_distance) + '_test.csv', index=None)
 
 
 if __name__=='__main__':
     my=point_datacreate()
+    my.set_max_distance(10)
     my.get_distance()
