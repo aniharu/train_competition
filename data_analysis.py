@@ -12,7 +12,6 @@ from myclass import myclass
 class deta_analysis(myclass):
     def __init__(self):
         super().__init__()
-
     # 詳細障害の棒グラフを表示する関数(acc:Trueで障害なし表示)
     def show_circle_dt(self, acc):
         labels = []
@@ -41,7 +40,6 @@ class deta_analysis(myclass):
         plt.title('各障害の総発生時間(詳細)')
         plt.xlabel('時間(10分)')
         plt.show()
-
     # カテゴリ障害の棒グラフを表示する関数(acc:Trueで障害なし表示)
     def show_circle_ct(self, acc):
         dic = {'異常なし': 0, '人身支障': 0, '機械支障': 0, '気象支障': 0}
@@ -68,7 +66,6 @@ class deta_analysis(myclass):
         plt.title('各障害の総発生時間')
         plt.xlabel('時間(10分)')
         plt.show()
-
     # カテゴリ障害の平均時間を求める関数
     def calc_acctime_ct(self):
         isacc = False
@@ -93,7 +90,6 @@ class deta_analysis(myclass):
         plt.title('各障害の平均発生時間')
         plt.xlabel('時間(10分)')
         plt.show()
-
     # 詳細障害の平均時間を求める関数
     def calc_acctime_dt(self):
         isacc = False
@@ -123,7 +119,6 @@ class deta_analysis(myclass):
         plt.title('各障害の平均発生時間')
         plt.xlabel('時間(10分)')
         plt.show()
-
 
 if __name__ == '__main__':
     my = deta_analysis()
