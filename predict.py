@@ -9,6 +9,7 @@ import numpy as np
 if __name__=='__main__':
     my=RandomForestC()
     #my=SVM()
+    my.set_minimum(0.001)
     my.set_trees(800)
     my.set_features('auto')
     my.model_create()
