@@ -21,9 +21,14 @@ class neuralnetC():
         self.alldata=pd.concat([self.train[0],self.train[1],self.train[2],self.train[3],self.train[4]])
     #zスコアを算出しかえす関数
     def zscore(self,data):
-        df=pd.DataFrame(pd.get_dummies(data['state']).as_matrix(),columns=['none','people','machine','weather'])
-        for i in ['temp','prec','wind','mwind']:
-            df[i]=np.array((data[i] - self.alldata[i].mean()) / self.alldata[i].std())
+        if 'state' in data.columns.tolist():
+            df=pd.DataFrame(pd.get_dummies(data['state']).as_matrix(),columns=['none','people','machine','weather'])
+            for i in ['temp','prec','wind','mwind']:
+                df[i]=np.array((data[i] - self.alldata[i].mean()) / self.alldata[i].std())
+        else:
+            df = pd.DataFrame()
+            for i in ['temp', 'prec', 'wind', 'mwind']:
+                df[i] = np.array((data[i] - self.alldata[i].mean()) / self.alldata[i].std())
         return df
     def df_merge(self, data):
         tmp = pd.DataFrame()
@@ -90,6 +95,8 @@ class neuralnetC():
         logloss/=len(act)
         logloss*=-1
         return logloss
+    def set_distance(self,distance):
+        self.maxdistance=distance
 
 if __name__=='__main__':
     my=neuralnetC()

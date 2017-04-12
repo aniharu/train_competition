@@ -89,5 +89,5 @@ class point_datacreate():
 
 if __name__=='__main__':
     my=point_datacreate()
-    my.set_max_distance(10)
+    my.set_max_distance(30)
     my.get_distance()
