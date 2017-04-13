@@ -4,7 +4,7 @@
 from neuralnet import neuralnetC
 import pandas as pd
 from keras.models import Sequential
-from keras.layers.core import Dense, Activation
+from keras.layers.core import Dense, Activation,Dropout
 
 class predict_neuralnet(neuralnetC):
     def read_data(self):
@@ -23,7 +23,7 @@ class predict_neuralnet(neuralnetC):
         self.alldata=pd.concat([self.train,self.test],ignore_index=True)
     def fit(self,x_train,y_train):
         self.train=self.zscore(self.train)
-        self.model.fit(x_train,y_train,validation_split=0.1,verbose=1)
+        self.model.fit(x_train,y_train,validation_split=0.1,verbose=2)
     def predict(self,x_test):
         #pred=self.model.predict_proba(x_test)
         pred = self.model.predict_proba(x_test,verbose=1)
@@ -42,19 +42,23 @@ class predict_neuralnet(neuralnetC):
                 submit[str(i)]=pred[:,i]
         submit.to_csv('nn_submit.csv', index=False, header=False, float_format='%.10f')
     def model_create(self):
+        input_length=len(self.use_var)
         self.model = Sequential()
-        self.model.add(Dense(4, input_dim=4))
+        self.model.add(Dense(input_length, input_dim=input_length))
         self.model.add(Activation("relu"))
-        self.model.add(Dense(4, input_dim=4))
+        self.model.add(Dense(input_length, input_dim=input_length))
         self.model.add(Activation("relu"))
-        self.model.add(Dense(4, input_dim=4))
+        self.model.add(Dense(4, input_dim=input_length))
         self.model.add(Activation("softmax"))
         self.model.compile(loss="categorical_crossentropy", optimizer="adam")
+    def set_var(self,var):
+        self.use_var=var
 
 
 
 if __name__=='__main__':
     my=predict_neuralnet()
-    my.set_distance(10)
+    my.set_var(['temp','prec','wind','mwind'])
+    my.set_distance(20)
     my.read_data()
     my.submit()

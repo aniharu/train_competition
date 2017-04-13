@@ -11,6 +11,7 @@ class neuralnetC():
     def __init__(self):
         self.maxdistance=20
         self.min = 1e-15
+        self.use_var = ['temp','prec','wind','mwind']
     def read_data(self):
         self.train = []
         self.train.append(pd.read_csv('data/point_train/tyuou_' + str(self.maxdistance) + '_train.csv'))
@@ -23,11 +24,11 @@ class neuralnetC():
     def zscore(self,data):
         if 'state' in data.columns.tolist():
             df=pd.DataFrame(pd.get_dummies(data['state']).as_matrix(),columns=['none','people','machine','weather'])
-            for i in ['temp','prec','wind','mwind']:
+            for i in self.use_var:
                 df[i]=np.array((data[i] - self.alldata[i].mean()) / self.alldata[i].std())
         else:
             df = pd.DataFrame()
-            for i in ['temp', 'prec', 'wind', 'mwind']:
+            for i in self.use_var:
                 df[i] = np.array((data[i] - self.alldata[i].mean()) / self.alldata[i].std())
         return df
     def df_merge(self, data):

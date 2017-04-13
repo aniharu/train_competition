@@ -66,7 +66,8 @@ class point_datacreate():
             df['wind'] = self.get_near_data_mean(self.wind, ids)
             ids = self.get_point_id(n, self.mwind)
             print('最大風速の数' + str(len(ids)))
-            df['mwind'] = self.get_near_data_mean(self.mwind, ids)
+            #df['mwind'] = self.get_near_data_mean(self.mwind, ids)
+            df['mwind'] = self.get_near_data_max(self.mwind, ids)
             df.to_csv('data/point_train/' + n+'_'+str(self.max_distance) + '_train.csv', index=None)
         name = ['sotobou','syonan','takasaki','utsunomiya','yamanote']
         for n in name:
@@ -83,11 +84,12 @@ class point_datacreate():
             df['wind'] = self.get_near_data_mean(self.wind, ids)
             ids = self.get_point_id(n, self.mwind)
             print('最大風速の数' + str(len(ids)))
-            df['mwind'] = self.get_near_data_mean(self.mwind, ids)
+            #df['mwind'] = self.get_near_data_mean(self.mwind, ids)
+            df['mwind'] = self.get_near_data_max(self.mwind, ids)
             df.to_csv('data/point_train/' + n+'_'+str(self.max_distance) + '_test.csv', index=None)
 
 
 if __name__=='__main__':
     my=point_datacreate()
-    my.set_max_distance(30)
+    my.set_max_distance(20)
     my.get_distance()
