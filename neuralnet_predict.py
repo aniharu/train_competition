@@ -5,6 +5,7 @@ from neuralnet import neuralnetC
 import pandas as pd
 from keras.models import Sequential
 from keras.layers.core import Dense, Activation,Dropout
+import pickle
 
 class predict_neuralnet(neuralnetC):
     def read_data(self):
@@ -53,12 +54,21 @@ class predict_neuralnet(neuralnetC):
         self.model.compile(loss="categorical_crossentropy", optimizer="adam")
     def set_var(self,var):
         self.use_var=var
+    def pickle_data(self):
+        train = self.zscore(self.train)
+        test = self.zscore(self.test)
+        with open('data/pickle/train.pickle','wb') as f:
+            pickle.dump(train, f)
+        with open('data/pickle/test.pickle','wb') as f:
+            pickle.dump(test, f)
+
 
 
 
 if __name__=='__main__':
     my=predict_neuralnet()
     my.set_var(['temp','prec','wind','mwind'])
-    my.set_distance(20)
+    #my.set_distance(20)
     my.read_data()
-    my.submit()
+    my.pickle_data()
+    #my.submit()
