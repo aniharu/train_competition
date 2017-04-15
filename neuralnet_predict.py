@@ -45,9 +45,11 @@ class predict_neuralnet(neuralnetC):
     def model_create(self):
         input_length=len(self.use_var)
         self.model = Sequential()
-        self.model.add(Dense(input_length, input_dim=input_length))
+        self.model.add(Dense(32, input_dim=input_length))
+        self.model.add(Dropout(0.5))
         self.model.add(Activation("relu"))
-        self.model.add(Dense(input_length, input_dim=input_length))
+        self.model.add(Dense(32, input_dim=input_length))
+        self.model.add(Dropout(0.5))
         self.model.add(Activation("relu"))
         self.model.add(Dense(4, input_dim=input_length))
         self.model.add(Activation("softmax"))
@@ -68,7 +70,6 @@ class predict_neuralnet(neuralnetC):
 if __name__=='__main__':
     my=predict_neuralnet()
     my.set_var(['temp','prec','wind','mwind'])
-    #my.set_distance(20)
+    my.set_distance(20)
     my.read_data()
-    my.pickle_data()
-    #my.submit()
+    my.submit()

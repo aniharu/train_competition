@@ -10,22 +10,23 @@ import pandas as pd
 import numpy as np
 
 class RNN_predict(predict_neuralnet):
-    def __init__(self):
+    def __init__(self,span):
+        self.set_span(span)
         self.read_data()
     def read_data(self):
-        with open('data/pickle/train_x.pickle','rb') as f:
+        with open('data/pickle/'+str(self.span)+'train_x.pickle','rb') as f:
             self.train_x=pickle.load(f)
-        with open('data/pickle/train_y.pickle','rb') as f:
+        with open('data/pickle/'+str(self.span)+'train_y.pickle','rb') as f:
             self.train_y=pickle.load(f)
-        with open('data/pickle/test_x.pickle','rb') as f:
+        with open('data/pickle/'+str(self.span)+'test_x.pickle','rb') as f:
             self.test_x=pickle.load(f)
         print(len(self.train_x[0,0]))
     def model_create(self):
         self.model = Sequential()
         self.model.add(SimpleRNN(12,batch_input_shape=(None, len(self.train_x[0]),len(self.train_x[0,0]))))
         self.model.add(Activation("relu"))
-        self.model.add(Dense(8, input_dim=12))
-        self.model.add(Activation("relu"))
+        #self.model.add(SimpleRNN(8))
+        #self.model.add(Activation("relu"))
         self.model.add(Dense(4, input_dim=8))
         self.model.add(Activation("softmax"))
         self.model.compile(loss="categorical_crossentropy", optimizer="adam")
@@ -49,6 +50,8 @@ class RNN_predict(predict_neuralnet):
             my_insert=[static_pred[i]] * time_num
             submit[str(i)]=np.hstack([my_insert,pred[:,i]])
         submit.to_csv('rnn_submit.csv', index=False, header=False, float_format='%.10f')
+    def set_span(self,num):
+        self.span=num
 
 if __name__=='__main__':
     my=RNN_predict()
