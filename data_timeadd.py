@@ -19,10 +19,10 @@ def doniti(date):
             return 0
 
 class timeadd():
-    def __init__(self):
-        with open('data/pickle/train.pickle', 'rb') as f:
+    def __init__(self,distance=20):
+        with open('data/pickle/train_'+str(distance)+'km.pickle', 'rb') as f:
             self.train = pickle.load(f)
-        with open('data/pickle/test.pickle', 'rb') as f:
+        with open('data/pickle/test_'+str(distance)+'km.pickle', 'rb') as f:
             self.test = pickle.load(f)
         self.timedf=pd.read_csv('data/train.csv',parse_dates=True,index_col=0)
         self.timedf = self.timedf.index.tolist() * 5
@@ -47,9 +47,9 @@ class timeadd():
         self.test['holiday'] = self.doniti
 
         pprint.pprint(self.train)
-        with open('data/pickle/train_holiday.pickle', 'wb') as f:
+        with open('data/pickle/train_'+str(distance)+'.pickle', 'wb') as f:
             pickle.dump(self.train,f)
-        with open('data/pickle/test_holiday.pickle', 'wb') as f:
+        with open('data/pickle/test_'+str(distance)+'.pickle', 'wb') as f:
             pickle.dump(self.test,f)
 
 if __name__=='__main__':
