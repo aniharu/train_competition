@@ -14,20 +14,20 @@ class RNN_predict(predict_neuralnet):
         self.set_span(span)
         self.read_data()
     def read_data(self):
-        with open('data/pickle/'+str(self.span)+'train_x.pickle','rb') as f:
+        with open('data/pickle/'+str(self.span)+'train_holiday_x.pickle','rb') as f:
             self.train_x=pickle.load(f)
-        with open('data/pickle/'+str(self.span)+'train_y.pickle','rb') as f:
+        with open('data/pickle/'+str(self.span)+'train_holiday_y.pickle','rb') as f:
             self.train_y=pickle.load(f)
-        with open('data/pickle/'+str(self.span)+'test_x.pickle','rb') as f:
+        with open('data/pickle/'+str(self.span)+'test_holiday_x.pickle','rb') as f:
             self.test_x=pickle.load(f)
         print(len(self.train_x[0,0]))
     def model_create(self):
         self.model = Sequential()
-        self.model.add(SimpleRNN(12,batch_input_shape=(None, len(self.train_x[0]),len(self.train_x[0,0]))))
+        self.model.add(SimpleRNN(32,batch_input_shape=(None, len(self.train_x[0]),len(self.train_x[0,0])),return_sequences=True,consume_less='gpu'))
         self.model.add(Activation("relu"))
-        #self.model.add(SimpleRNN(8))
-        #self.model.add(Activation("relu"))
-        self.model.add(Dense(4, input_dim=8))
+        self.model.add(SimpleRNN(8, return_sequences=False,consume_less='gpu'))
+        self.model.add(Activation("relu"))
+        self.model.add(Dense(4))
         self.model.add(Activation("softmax"))
         self.model.compile(loss="categorical_crossentropy", optimizer="adam")
     def fit(self):
@@ -54,5 +54,5 @@ class RNN_predict(predict_neuralnet):
         self.span=num
 
 if __name__=='__main__':
-    my=RNN_predict()
+    my=RNN_predict(18)
     my.submit()

@@ -31,7 +31,7 @@ class LSTM_predict(RNN_predict):
             submit[str(i)]=np.hstack([my_insert,pred[:,i]])
         submit.to_csv('lstm_submit.csv', index=False, header=False, float_format='%.10f')
     def fit(self):
-        self.model.fit(self.train_x,self.train_y,batch_size=1000,validation_split=0.1,verbose=2,epochs=50,callbacks=[EarlyStopping(patience=10)])
+        self.model.fit(self.train_x,self.train_y,batch_size=32,validation_split=0.1,verbose=2,epochs=10)
 
 if __name__=='__main__':
     my=LSTM_predict(18)

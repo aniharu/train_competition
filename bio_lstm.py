@@ -23,11 +23,11 @@ class BIO_predict(RNN_predict):
         left = Sequential()
         left.add(LSTM(output_dim=24, init='uniform', inner_init='uniform',
                forget_bias_init='one', return_sequences=True, activation='tanh',
-               inner_activation='sigmoid', input_shape=(len(self.train_x[0]),len(self.train_x[0,0]))))
+               inner_activation='sigmoid', input_shape=(len(self.train_x[0]),len(self.train_x[0,0])),dropout=0.5,recurrent_dropout=0.5))
         right = Sequential()
         right.add(LSTM(output_dim=24, init='uniform', inner_init='uniform',
                       forget_bias_init='one', return_sequences=True, activation='tanh',
-                      inner_activation='sigmoid', input_shape=(len(self.train_x[0]), len(self.train_x[0, 0])),go_backwards=True))
+                      inner_activation='sigmoid', input_shape=(len(self.train_x[0]), len(self.train_x[0, 0])),dropout=0.5,recurrent_dropout=0.5,go_backwards=True))
         model = Sequential()
         model.add(Merge([left, right], mode='sum'))
         left, right = fork(model)
@@ -48,7 +48,7 @@ class BIO_predict(RNN_predict):
         self.model.add(Activation('softmax'))
         self.model.compile(loss="categorical_crossentropy", optimizer="adam")
     def fit(self):
-        self.model.fit([self.train_x,self.train_x],self.train_y,validation_split=0,verbose=2)
+        self.model.fit([self.train_x,self.train_x],self.train_y,nb_epoch=10,validation_split=0.1,verbose=2)
     def submit(self):
         self.model_create()
         self.fit()
@@ -63,10 +63,11 @@ class BIO_predict(RNN_predict):
             time_num=len(submit) - len(pred)
             my_insert=[static_pred[i]] * time_num
             submit[str(i)]=np.hstack([my_insert,pred[:,i]])
-        submit.to_csv('lstm_submit.csv', index=False, header=False, float_format='%.10f')
+        submit.to_csv('biolstm_submit.csv', index=False, header=False, float_format='%.10f')
 
     def predict(self):
         pred = self.model.predict_proba([self.test_x,self.test_x], verbose=2)
+        return pred
 
 if __name__=='__main__':
     my=BIO_predict(18)
