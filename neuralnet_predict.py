@@ -11,16 +11,16 @@ class predict_neuralnet(neuralnetC):
     def read_data(self):
         self.train = pd.DataFrame()
         self.test=pd.DataFrame()
-        self.train=pd.concat([self.train,pd.read_csv('data/point_train/tyuou_' + str(self.maxdistance) + '_train.csv')],ignore_index=True)
-        self.train =self.train.append(pd.read_csv('data/point_train/keihintohoku_' + str(self.maxdistance) + '_train.csv'))
-        self.train =self.train.append(pd.read_csv('data/point_train/keiyou_' + str(self.maxdistance) + '_train.csv'))
-        self.train =self.train.append(pd.read_csv('data/point_train/uchibou_' + str(self.maxdistance) + '_train.csv'))
-        self.train = self.train.append(pd.read_csv('data/point_train/saikyoukawagoe_' + str(self.maxdistance) + '_train.csv'))
-        self.test=pd.concat([self.test,pd.read_csv('data/point_train/sotobou_' + str(self.maxdistance) + '_test.csv')],ignore_index=True)
-        self.test=self.test.append(pd.read_csv('data/point_train/utsunomiya_' + str(self.maxdistance) + '_test.csv'))
-        self.test =self.test.append(pd.read_csv('data/point_train/yamanote_' + str(self.maxdistance) + '_test.csv'))
-        self.test =self.test.append(pd.read_csv('data/point_train/syonan_' + str(self.maxdistance) + '_test.csv'))
-        self.test =self.test.append(pd.read_csv('data/point_train/takasaki_' + str(self.maxdistance) + '_test.csv'))
+        self.train=pd.concat([self.train,pd.read_csv('data/points/tyuou_' + str(self.maxdistance) + '_train.csv')],ignore_index=True)
+        self.train =self.train.append(pd.read_csv('data/points/keihintohoku_' + str(self.maxdistance) + '_train.csv'))
+        self.train =self.train.append(pd.read_csv('data/points/keiyou_' + str(self.maxdistance) + '_train.csv'))
+        self.train =self.train.append(pd.read_csv('data/points/uchibou_' + str(self.maxdistance) + '_train.csv'))
+        self.train = self.train.append(pd.read_csv('data/points/saikyoukawagoe_' + str(self.maxdistance) + '_train.csv'))
+        self.test=pd.concat([self.test,pd.read_csv('data/points/sotobou_' + str(self.maxdistance) + '_test.csv')],ignore_index=True)
+        self.test=self.test.append(pd.read_csv('data/points/utsunomiya_' + str(self.maxdistance) + '_test.csv'))
+        self.test =self.test.append(pd.read_csv('data/points/yamanote_' + str(self.maxdistance) + '_test.csv'))
+        self.test =self.test.append(pd.read_csv('data/points/syonan_' + str(self.maxdistance) + '_test.csv'))
+        self.test =self.test.append(pd.read_csv('data/points/takasaki_' + str(self.maxdistance) + '_test.csv'))
         self.alldata=pd.concat([self.train,self.test],ignore_index=True)
     def fit(self,x_train,y_train):
         self.train=self.zscore(self.train)
@@ -59,9 +59,9 @@ class predict_neuralnet(neuralnetC):
     def pickle_data(self):
         train = self.zscore(self.train)
         test = self.zscore(self.test)
-        with open('data/pickle/train.pickle','wb') as f:
+        with open('data/pickle/train_'+str(self.maxdistance)+'km.pickle','wb') as f:
             pickle.dump(train, f)
-        with open('data/pickle/test.pickle','wb') as f:
+        with open('data/pickle/test_'+str(self.maxdistance)+'km.pickle','wb') as f:
             pickle.dump(test, f)
 
 
@@ -69,7 +69,8 @@ class predict_neuralnet(neuralnetC):
 
 if __name__=='__main__':
     my=predict_neuralnet()
-    my.set_var(['temp','prec','wind','mwind'])
+    my.set_var(['temp','hud','prec','wind','mwind'])
     my.set_distance(20)
     my.read_data()
-    my.submit()
+    #my.submit()
+    my.pickle_data()

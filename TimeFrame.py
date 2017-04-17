@@ -43,5 +43,5 @@ class create_time_data():
 
 if __name__=='__main__':
     my=create_time_data()
-    my.set_timespan(24)
+    my.set_timespan(18)
     my.create_data()

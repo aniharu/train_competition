@@ -56,4 +56,4 @@ def split_by_id(name):
 
 
 if __name__=='__main__':
-    split_by_id('wind')
+    split_by_id('humidity')

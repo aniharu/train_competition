@@ -11,13 +11,14 @@ class point_datacreate():
         self.prec = pd.read_csv('data/fixed_precipitation.csv',na_values='-')
         self.wind = pd.read_csv('data/fixed_wind.csv',na_values='-')
         self.mwind = pd.read_csv('data/fixed_wind_max.csv',na_values='-')
+        self.hud = pd.read_csv('data/fixed_humidity.csv', na_values='-')
         self.train = pd.read_csv('data/train.csv')
         self.max_distance = 20
-
         self.temp = self.temp.fillna(method='ffill')
         self.prec = self.prec.fillna(method='ffill')
         self.wind = self.wind.fillna(method='ffill')
         self.mwind = self.mwind.fillna(method='ffill')
+        self.hud = self.hud.fillna(method='ffill')
     def set_max_distance(self,dist):
         self.max_distance = dist
     #特定の範囲内の観測地点のidを返す関数
@@ -58,6 +59,9 @@ class point_datacreate():
             ids=self.get_point_id(n,self.temp)
             print('温度の数'+str(len(ids)))
             df['temp']=self.get_near_data_mean(self.temp,ids)
+            ids = self.get_point_id(n, self.hud)
+            print('湿度の数' + str(len(ids)))
+            df['hud'] = self.get_near_data_mean(self.hud, ids)
             ids = self.get_point_id(n, self.prec)
             print('降水量の数' + str(len(ids)))
             df['prec'] = self.get_near_data_mean(self.prec, ids)
@@ -68,7 +72,7 @@ class point_datacreate():
             print('最大風速の数' + str(len(ids)))
             #df['mwind'] = self.get_near_data_mean(self.mwind, ids)
             df['mwind'] = self.get_near_data_max(self.mwind, ids)
-            df.to_csv('data/point_train/' + n+'_'+str(self.max_distance) + '_train.csv', index=None)
+            df.to_csv('data/points/' + n+'_'+str(self.max_distance) + '_train.csv', index=None)
         name = ['sotobou','syonan','takasaki','utsunomiya','yamanote']
         for n in name:
             print(n + 'を実行中です')
@@ -76,6 +80,9 @@ class point_datacreate():
             ids = self.get_point_id(n, self.temp)
             print('温度の数' + str(len(ids)))
             df['temp'] = self.get_near_data_mean(self.temp, ids)
+            ids = self.get_point_id(n, self.hud)
+            print('湿度の数' + str(len(ids)))
+            df['hud'] = self.get_near_data_mean(self.hud, ids)
             ids = self.get_point_id(n, self.prec)
             print('降水量の数' + str(len(ids)))
             df['prec'] = self.get_near_data_mean(self.prec, ids)
@@ -86,10 +93,10 @@ class point_datacreate():
             print('最大風速の数' + str(len(ids)))
             #df['mwind'] = self.get_near_data_mean(self.mwind, ids)
             df['mwind'] = self.get_near_data_max(self.mwind, ids)
-            df.to_csv('data/point_train/' + n+'_'+str(self.max_distance) + '_test.csv', index=None)
+            df.to_csv('data/points/' + n+'_'+str(self.max_distance) + '_test.csv', index=None)
 
 
 if __name__=='__main__':
     my=point_datacreate()
-    my.set_max_distance(20)
+    my.set_max_distance(40)
     my.get_distance()
