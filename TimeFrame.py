@@ -23,13 +23,13 @@ class create_time_data():
         test_x=[]
         for i in tqdm(range(self.span,len(self.train),1)):
             one_step=[]
-            for j in range(self.span,-1,-1):
+            for j in range(self.span,0,-1):
                 one_step.append(self.train.ix[i-j].tolist()[4:])
             train_x.append(one_step)
         print('\n訓練データ作成完了')
         for i in tqdm(range(self.span,len(self.test),1)):
             one_step=[]
-            for j in range(self.span,-1,-1):
+            for j in range(self.span,0,-1):
                 one_step.append(self.test.ix[i-j].tolist())
             test_x.append(one_step)
         with open('data/pickle/' + str(self.span) + 'train_holiday_x.pickle', 'wb') as f:
@@ -43,5 +43,5 @@ class create_time_data():
 
 if __name__=='__main__':
     my=create_time_data()
-    my.set_timespan(18)
+    my.set_timespan(24)
     my.create_data()
